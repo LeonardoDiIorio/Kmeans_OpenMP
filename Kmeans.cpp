@@ -111,7 +111,7 @@ void  Kmeans::initializeCentroids()
         double value = inputPoints[randomPoint].getComponent(j);
         centroidComponents.push_back(value);
       }
-    #pragma omp critical
+      #pragma omp critical
       clusters.emplace_back(centroidComponents);
     }
 }
@@ -148,7 +148,7 @@ void Kmeans::assignPoints()
 
 void Kmeans::updateCentroids()
 {
-    #pragma omp parallel for 
+   #pragma omp parallel for 
     for(int i=0;i<numberOfClusters;i++)
     {
       vector<Point> members = clusters[i].getMembers();
@@ -170,7 +170,7 @@ void Kmeans::computeError()
 {
   double SSE=0;
   double interClusterSum;
-    #pragma omp parallel for //meglio senza reduction
+    #pragma omp parallel for 
     for(int i=0;i<numberOfClusters;i++)
     {
       vector<Point> members = clusters[i].getMembers();

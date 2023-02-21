@@ -1,4 +1,4 @@
-#include "Kmeans.cpp"
+#include "Kmeans.h"
 #include <chrono>
 #include <iostream>
 #include <fstream>
@@ -12,7 +12,7 @@ int main()
   int numTest=1;
  
   ofstream myfile;
-  myfile.open ("example.csv");
+  myfile.open ("kmeans.csv");
   for(int k=2;k<maxThreads+1;k+=2)
   {
     omp_set_num_threads(k);
