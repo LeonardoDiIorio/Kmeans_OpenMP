@@ -11,11 +11,11 @@ using namespace std;
 
 int main()
 {
-  int maxThreads=12;
+  int maxThreads=16;
   int MAX_ITER=40;
   int dim=3;
-  int numPoints=100000;
-  int numClusters=40;
+  int numPoints=65536;
+  int numClusters=256;
   float* points=new float[numPoints*dim]; //matrice dei punti
   float* centroids= new float[numClusters*dim]; //matrice dei centroidi
   int* membersCounter= new int[numClusters];
@@ -29,10 +29,10 @@ int main()
   
   for(int k=2;k<maxThreads+1;k+=2)
   {
-    //setto il numero di thread
+
     omp_set_num_threads(k);
         
-    //inizializzo la matrice dei punti
+
     for(int i=0;i<numPoints;i++)
     {
         for(int j=0;j<dim;j++)
@@ -41,17 +41,16 @@ int main()
         }
     }
     
-    //inizializzo la matrice dei centroidi
+
     for(int h=0;h<numClusters;h++)
     {
-      int randomPoint=rand()%numClusters;
       for(int d=0;d<dim;d++)
       {
-        *(centroids+h*dim+d)=*(points+randomPoint*dim+d);
+        *(centroids+h*dim+d)=*(points+h*dim+d);
       }
     }
     
-    //inizializzo l'array dei contatori
+
     for(int c=0;c<numClusters;c++)
     {
       membersCounter[c]=0;

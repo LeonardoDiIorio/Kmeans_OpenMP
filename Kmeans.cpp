@@ -25,7 +25,7 @@ void Kmeans::kmeansIteration()
     for(int n=0;n<numPoints;n++)
     {
        int nearestCluster=0;
-       int minDistance=100000000;
+       int minDistance=INT_MAX;
        
        //determina il centroide più vicino per ogni punto n 
        for(int c=0;c<numClusters;c++)
@@ -35,20 +35,22 @@ void Kmeans::kmeansIteration()
         {
            euclideanDistance+=pow(*(points+n*dim+d)-*(centroids+c*dim+d),2);
         }
-        euclideanDistance=sqrt(euclideanDistance);
+        //euclideanDistance=sqrt(euclideanDistance);
         if(euclideanDistance<minDistance)
         {    
         minDistance=euclideanDistance;
         nearestCluster=c;
         }
        }
-       
+       //Aaggiungere atommic
        //sommo i punti nel corrispondente centroide più vicino
        for(int j=0;j<dim;j++)
        {
+#pragma omp atomic
          *(newCentroids+nearestCluster*dim+j)+=*(points+n*dim+j);
        }
        //mantiene il numero di punti in ciascun cluster
+#pragma omp atomic
        membersCounter[nearestCluster]++;      
     }
 
@@ -78,7 +80,8 @@ void Kmeans::computeKmeans(int MAX_ITER)
 {
     for(int i=0;i<MAX_ITER;i++)
     {
-      for(int i=0;i<numClusters;i++){
+      for(int i=0;i<numClusters;i++)
+      {
         membersCounter[i]=0;
       }
       kmeansIteration();
